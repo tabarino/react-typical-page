@@ -11,9 +11,19 @@ const Login = (props) => {
   const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
-    setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6
-    );
+    const setTimeoutIdentifier = setTimeout(() => {
+      console.log('Check validity');
+      setFormIsValid(
+        enteredEmail.includes('@') && enteredPassword.trim().length > 6
+      );
+    }, 1000);
+
+    // Cleanup function - It ensures the setFormIsValid is called only 1s after the user stops typing
+    // It won't be execute only in the first time the useEffect runs
+    return () => {
+      console.log('cleanup');
+      clearTimeout(setTimeoutIdentifier);
+    };
   }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
