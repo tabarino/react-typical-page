@@ -48,21 +48,23 @@ const Login = (props) => {
     isValid: null
   });
 
-  // useEffect(() => {
-  //   const setTimeoutIdentifier = setTimeout(() => {
-  //     console.log('Check validity');
-  //     setFormIsValid(
-  //       enteredEmail.includes('@') && enteredPassword.trim().length > 6
-  //     );
-  //   }, 1000);
+  // emailIsValid and passwordIsValid are alias to isValid in this Object Destructuring
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
 
-  //   // Cleanup function - It ensures the setFormIsValid is called only 1s after the user stops typing
-  //   // It won't be execute only in the first time the useEffect runs
-  //   return () => {
-  //     console.log('cleanup');
-  //     clearTimeout(setTimeoutIdentifier);
-  //   };
-  // }, [enteredEmail, enteredPassword]);
+  useEffect(() => {
+    const setTimeoutIdentifier = setTimeout(() => {
+      console.log('Check validity');
+      setFormIsValid(emailIsValid && passwordIsValid);
+    }, 1000);
+
+    // Cleanup function - It ensures the setFormIsValid is called only 1s after the user stops typing
+    // It won't be execute only in the first time the useEffect runs
+    return () => {
+      console.log('cleanup');
+      clearTimeout(setTimeoutIdentifier);
+    };
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
@@ -71,9 +73,9 @@ const Login = (props) => {
       value: event.target.value
     });
 
-    setFormIsValid(
-      event.target.value.includes('@') && passwordState.isValid
-    );
+    // setFormIsValid(
+    //   event.target.value.includes('@') && passwordState.isValid
+    // );
   };
 
   const passwordChangeHandler = (event) => {
@@ -83,9 +85,9 @@ const Login = (props) => {
       value: event.target.value
     });
 
-    setFormIsValid(
-      event.target.value.trim().length > 6 && emailState.isValid
-    );
+    // setFormIsValid(
+    //   event.target.value.trim().length > 6 && emailState.isValid
+    // );
   };
 
   const validateEmailHandler = () => {
