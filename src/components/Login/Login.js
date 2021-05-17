@@ -56,7 +56,7 @@ const Login = (props) => {
     const setTimeoutIdentifier = setTimeout(() => {
       console.log('Check validity');
       setFormIsValid(emailIsValid && passwordIsValid);
-    }, 1000);
+    }, 500);
 
     // Cleanup function - It ensures the setFormIsValid is called only 1s after the user stops typing
     // It won't be execute only in the first time the useEffect runs
