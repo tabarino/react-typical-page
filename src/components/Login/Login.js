@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react';
+import React, { useState, useEffect, useReducer, useContext, useRef } from 'react';
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
@@ -51,6 +51,9 @@ const Login = (props) => {
   });
 
   const ctx = useContext(AuthContext);
+  
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
 
   // emailIsValid and passwordIsValid are alias to isValid in this Object Destructuring
   const { isValid: emailIsValid } = emailState;
@@ -106,7 +109,13 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    ctx.onLogin(emailState.value, passwordState.value);
+    if (formIsValid) {
+      ctx.onLogin(emailState.value, passwordState.value);
+    } else if (!emailIsValid) {
+      emailInputRef.current.focus();
+    } else {
+      passwordInputRef.current.focus();
+    }
   };
 
   return (
@@ -119,7 +128,8 @@ const Login = (props) => {
           isValid={emailIsValid}
           value={emailState.value}
           onChange={emailChangeHandler}
-          onBlur={validateEmailHandler}>
+          onBlur={validateEmailHandler}
+          ref={emailInputRef}>
         </Input>
         <Input
           id="password"
@@ -128,10 +138,11 @@ const Login = (props) => {
           isValid={passwordIsValid}
           value={passwordState.value}
           onChange={passwordChangeHandler}
-          onBlur={validatePasswordHandler}>
+          onBlur={validatePasswordHandler}
+          ref={passwordInputRef}>
         </Input>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button type="submit" className={classes.btn}>
             Login
           </Button>
         </div>
